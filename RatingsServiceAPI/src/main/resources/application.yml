@@ -1,0 +1,13 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: RATING-SERVICE
+  config:
+    import: optional:configserver:http://cloud-config-server-docker:8070/
+  batch:
+    jdbc:
+      initialize-schema: ALWAYS
+    job:
+      enabled: false
