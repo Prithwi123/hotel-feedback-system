@@ -1,0 +1,69 @@
+version: '3'
+services:
+  service-registry:
+    container_name: service-registry-docker
+    image: hotel-rating-service/service-registry
+    build: 
+      context: ./ServiceRegistry
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+
+  config-server:
+    container_name: cloud-config-server-docker
+    image: hotel-rating-service/config-server
+    build: 
+      context: ./ConfigServer
+      dockerfile: Dockerfile
+    ports:
+      - "8070:8070"
+    links:
+      - "service-registry:service-registry-docker"
+
+  hotel-service:
+    container_name: hotel-service-docker
+    image: hotel-rating-service/hotel-service
+    build: 
+      context: ./HotelServiceAPI
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    links:
+      - "service-registry:service-registry-docker"
+      - "config-server:cloud-config-server-docker"
+
+  rating-service:
+    container_name: rating-service-docker
+    image: hotel-rating-service/rating-service
+    build:
+      context: ./RatingsServiceAPI
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    links:
+      - "service-registry:service-registry-docker"
+      - "config-server:cloud-config-server-docker"
+
+  user-service:
+    container_name: user-service-docker
+    image: hotel-rating-service/user-service
+    build:
+      context: ./UserServiceAPI
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    links:
+      - "service-registry:service-registry-docker"
+      - "config-server:cloud-config-server-docker"
+
+  api-gateway:
+    container_name: api-gateway-docker
+    image: hotel-rating-service/api-gateway
+    build:
+      context: ./APIGateWay
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8090"
+    links:
+      - "service-registry:service-registry-docker"
+      - "config-server:cloud-config-server-docker"
