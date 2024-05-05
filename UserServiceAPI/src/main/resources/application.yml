@@ -1,0 +1,47 @@
+server:
+  port: 8081
+
+spring:
+  config:
+    import: optional:configserver:http://cloud-config-server-docker:8070/
+  application:
+    name: USER-SERVICE
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      USER-SERVICE:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 60
+        minimumNumberOfCalls: 6
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 3s
+        permittedNumberOfCallsInHalfOpenState: 2
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+
+
+
+
+
+
+
+
+
+
+
+    
