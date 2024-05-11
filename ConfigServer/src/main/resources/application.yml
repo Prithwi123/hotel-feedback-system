@@ -8,7 +8,10 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/Prithwi123/MicroServices-config
+          uri: ${giturl}
+          username: ${user}
+          password: ${pass}
+          label: ${branch}
           clone-on-start: true
 
 eureka:

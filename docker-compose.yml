@@ -8,6 +8,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8085:8085"
+    env_file:
+      - var.env
 
   config-server:
     container_name: cloud-config-server-docker
@@ -19,6 +21,9 @@ services:
       - "8070:8070"
     links:
       - "service-registry:service-registry-docker"
+    env_file:
+      - var.env
+
 
   hotel-service:
     container_name: hotel-service-docker
